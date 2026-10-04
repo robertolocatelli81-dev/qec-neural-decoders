@@ -69,10 +69,10 @@ never see a real shot in training.
 | tensor network contraction (Google) | 12.72% |
 | belief matching (Google) | 13.06% |
 | correlated matching (Google) | 14.43% |
-| MLP, 500k simulated shots, 4000 steps × 512 (27 s) | 15.37% |
+| MLP, 500k simulated shots, 4000 steps × 512 (10.4 s of training) | 15.37% |
 | PyMatching, data-derived models (here) | 15.51% |
 | PyMatching (Google; reproduced here) | 15.74% |
-| Transformer, 500k simulated shots, 3000 steps × 128 (373 s) | 20.39% |
+| Transformer, 500k simulated shots, 3000 steps × 128 (372.8 s of training) | 20.39% |
 | null (MLP and Transformer on permuted labels) | 27.84% |
 | trivial | 27.84% |
 
