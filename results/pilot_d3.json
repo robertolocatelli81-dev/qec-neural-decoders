@@ -1,0 +1,14 @@
+{
+ "distance": 3,
+ "rounds": 3,
+ "p": 0.005,
+ "train_shots": 200000,
+ "test_shots": 100000,
+ "detectors": 24,
+ "flip_rate_test": 0.10461,
+ "trivial": 0.10461,
+ "matching": 0.0171,
+ "mlp": 0.01898,
+ "mlp_seconds_per_step": 0.0023093857426720204,
+ "null_permuted_labels": 0.10461
+}

@@ -1,0 +1,2 @@
+{"distance": 3, "rounds": 3, "detectors": 24, "stim_seconds_per_100k_shots": 0.048, "batch": 64, "seconds_per_step": 0.0289, "shots_per_second_training": 2218.4, "peak_rss_mib": 1144}
+{"distance": 5, "rounds": 5, "detectors": 120, "stim_seconds_per_100k_shots": 0.179, "batch": 64, "seconds_per_step": 0.1798, "shots_per_second_training": 356.0, "peak_rss_mib": 3416}
