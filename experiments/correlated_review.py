@@ -1,6 +1,9 @@
 """Review driver: the SAME calls as experiments/correlated.py (same circuit, seeds, decoders, training) but it saves the
-MLP's per-shot predictions and pairs the MLP also against the matching whose merged edges carry the MOST PROBABLE fault
-set (results/correlated/matching_merge_most_probable.jsonl). Usage: python experiments/correlated_review.py <pc> <out_json>"""
+MLP's per-shot predictions (<out_json> with .json replaced by _mlp_pred.npy) and pairs the MLP also against the matching
+whose merged edges carry the MOST PROBABLE fault set (merge_most_probable below). Output: <out_json>
+(results/correlated/review_pc_<pc>.json). results/correlated/matching_merge_most_probable.json is the edge-level
+comparison between PyMatching's merged edges and this rule, written during the review; its error rates are the ones this
+script reproduces. Usage: python experiments/correlated_review.py <pc> <out_json>"""
 import json
 import sys
 

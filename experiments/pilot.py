@@ -40,6 +40,7 @@ out["arch"], out["steps"], out["batch"], out["val_frac"] = arch, steps, batch, v
 res = train(mk(), x_tr, y_tr, x_te, y_te, steps=steps, batch=batch, val_frac=val_frac)
 out["best_step"] = res.best_step
 out["learned"] = res.test_error
+out["fraction_predicted_1"] = float(np.mean(res.predictions))          # 0.0 = constant "no flip" on every test shot
 out["train_seconds"] = round(res.train_seconds, 1)
 y_perm = np.random.default_rng(3).permutation(y_tr)
 out["null_permuted_labels"] = train(mk(), x_tr, y_perm, x_te, y_te, steps=steps, batch=batch, seed=1, val_frac=val_frac).test_error

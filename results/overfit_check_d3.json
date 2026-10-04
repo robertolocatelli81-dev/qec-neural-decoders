@@ -1,18 +1,18 @@
 {
- "distance": 5,
+ "distance": 3,
  "batch": 64,
  "steps": 1000,
- "ones_in_batch": 18,
+ "ones_in_batch": 7,
  "mlp": {
   "error_on_the_memorised_batch": 0.0,
-  "train_seconds": 1.3
+  "train_seconds": 1.1
  },
  "transformer": {
   "error_on_the_memorised_batch": 0.0,
-  "train_seconds": 194.4
+  "train_seconds": 23.4
  },
  "geo": {
   "error_on_the_memorised_batch": 0.0,
-  "train_seconds": 196.3
+  "train_seconds": 24.4
  }
 }

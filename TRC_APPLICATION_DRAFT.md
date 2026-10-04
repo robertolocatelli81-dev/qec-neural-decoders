@@ -38,8 +38,9 @@ but behind correlated matching (14.43%). Results under uniform circuit-level noi
 - distance 5: matching 1.38–1.43%, MLP 7.03%, Transformer 14.78% after 1500 steps of 64 shots (262 s), null = trivial.
 - distance 3 with long-range correlated errors (pre-registered grid, 5 cells, exact paired tests, Bonferroni): the MLP
   beats PyMatching in the four correlated cells (e.g. 4.70% vs 9.53% at pc = 0.01) and not in the control cell without
-  correlated noise, as pre-registered. Measured afterwards: the gap is mostly how the library resolves degenerate
-  parallel edges; against a matching that keeps the most probable logical effect per edge the MLP wins by 0.2 points in
+  correlated noise, as pre-registered. Measured afterwards: this noise gives the code effective distance 2 for those
+  errors, and the gap is mostly how the library resolves the resulting degenerate parallel edges (documented PyMatching
+  behaviour for that case); against a matching that keeps the most probable logical effect per edge the MLP wins by 0.2–0.3 points in
   two cells, ties in one and loses by 0.3 in one, and it stays 0.2–0.6 points above an empirical near-optimal decoder
   (20 million-shot lookup table). The Transformer variants at distance 5 did not leave the constant-output plateau
   within 1500 steps on CPU (negative ablation, reported).

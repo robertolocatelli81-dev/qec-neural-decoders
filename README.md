@@ -56,7 +56,7 @@ from the table; 73–78 hours and 18–20 days across the three runs). The cost 
 built for.
 
 **Can the Transformer learn at all?** Trained on one fixed batch of 64 distance-5 shots for 1000 steps and evaluated on
-that same batch, it reaches 0.0% error (169 s), as the MLP does (1.3 s) — `experiments/overfit_check.py`,
+that same batch, it reaches 0.0% error (194.4 s), as the MLP (1.3 s) and the `GeoTransformer` (196.3 s) do — `experiments/overfit_check.py`,
 `results/overfit_check_d5.json`. Its poor held-out numbers above are therefore not an inability to fit; whether they are
 a budget or an architecture limit is what the larger runs would settle.
 
@@ -125,7 +125,11 @@ matching is better, p = 3.1e-4). **What the win is, measured after the fact.** E
 detectors plus the observable: an ordinary long edge of the matching graph, not a hyper-edge. At distance 3 the same two
 detectors are also the syndrome of a single X error on the central data qubit, which does not flip the observable. The two
 are parallel edges with different logical effect; PyMatching merges parallel edges keeping the logical effect of the first
-one in the error model (the single-qubit one here), whatever the probabilities. A matching built from the same error model
+one in the error model (the single-qubit one here), whatever the probabilities. This is documented PyMatching behaviour
+(the `Matching.from_detector_error_model` docstring), discussed by its maintainer in
+[PyMatching#103](https://github.com/oscarhiggott/PyMatching/issues/103): parallel edges with different logical effects
+mean the code has distance at most 2 for those errors, which is exactly what this correlated noise does at distance 3.
+A matching built from the same error model
 that keeps, per merged edge, the most probable logical effect gets 1.73% / 3.37% / 4.33% / 4.70% / 5.11%: the MLP is
 better than it by 0.26 and 0.20 points at pc = 0.002 and 0.005 (p = 2.7e-13 and 7.9e-10), equal at 0.01 (p = 0.93) and
 worse by 0.27 points at 0.02 (p = 6.0e-15). So most of the gap is one library's rule for degenerate parallel edges, not a
@@ -143,10 +147,12 @@ and the paired tests against it), `experiments/lookup_independent.py` (the near-
 **Ablation of the Transformer (distance 5, 5 rounds, p = 0.005, 300,000 shots, 1500 steps × 64; negative).** Transformer
 without validation 14.78%; with validation-selected checkpoint 18.72% (step 1200); a Transformer given stim's detector
 coordinates and a [CLS] readout (`GeoTransformer`), with validation, 23.35% — the trivial rate is 23.02%. It memorises a
-single batch of 64 distance-3 shots (0.0% error, like the MLP and the plain Transformer), and at 300 steps every
-Transformer variant tried, including the plain one, still outputs a constant "no flip" on all 20,000 test shots: within
-this CPU budget the plain Transformer leaves that plateau before 1500 steps and the coordinate/[CLS] one does not. Whether
-that is the readout, the coordinates or only the budget was not separated (it needs ≥ 1500 steps per variant).
+single batch of 64 shots at distance 3 and at distance 5 (0.0% error, like the MLP and the plain Transformer;
+`results/overfit_check_d3.json`, `results/overfit_check_d5.json`), and at 300 steps both the plain Transformer and the
+GeoTransformer still output a constant "no flip" on all 20,000 test shots (`fraction_predicted_1 = 0`,
+`results/ablation/d_transformer_300steps.json`, `results/ablation/e_geo_300steps.json`): within this CPU budget the plain
+Transformer leaves that plateau before 1500 steps and the coordinate/[CLS] one does not. Whether that is the readout, the
+coordinates or only the budget was not separated (it needs ≥ 1500 steps per variant).
 
 ## Reproduce
 
@@ -156,21 +162,36 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt     # version
 .venv/bin/python experiments/pilot.py 3 3 0.005 200000 3000 mlp 512
 .venv/bin/python experiments/pilot.py 5 5 0.005 300000 4000 mlp 512
 .venv/bin/python experiments/pilot.py 5 5 0.005 300000 1500 transformer 64
-.venv/bin/python experiments/overfit_check.py 5 64 1000
+.venv/bin/python experiments/overfit_check.py 5 64 1000 > results/overfit_check_d5.json
+.venv/bin/python experiments/overfit_check.py 3 64 1000 > results/overfit_check_d3.json
 .venv/bin/python experiments/scaling.py 64 20 3 5 7 && .venv/bin/python experiments/scaling.py 16 20 9 && .venv/bin/python experiments/scaling.py 4 20 11
 # real data: download google_qec3v5_experiment_data.zip from Zenodo 6804040 (md5 a7fd8b481c3087090093106382dc217d) and unzip into data/qec3v5/
 for e in surface_code_bX_d3_r01_center_3_5 surface_code_bX_d5_r05_center_5_5 surface_code_bX_d3_r25_center_3_5 surface_code_bX_d5_r25_center_5_5; do .venv/bin/python experiments/real_google.py data/qec3v5/$e; done   # positive controls
 .venv/bin/python experiments/real_google.py data/qec3v5/surface_code_bX_d3_r05_center_3_5 --learned mlp --train-shots 500000 --steps 4000 --batch 512
 .venv/bin/python experiments/real_google.py data/qec3v5/surface_code_bX_d3_r05_center_3_5 --learned transformer --train-shots 500000 --steps 3000 --batch 128
+# correlated errors (pre-registered grid, its review, the two near-optimal references) and the Transformer ablation
+for pc in 0 0.002 0.005 0.01 0.02; do .venv/bin/python experiments/correlated.py $pc > results/correlated/pc_$pc.json; done
+for pc in 0 0.002 0.005 0.01 0.02; do .venv/bin/python experiments/correlated_review.py $pc results/correlated/review_pc_$pc.json; done
+for pc in 0 0.002 0.005 0.01 0.02; do .venv/bin/python experiments/lookup_independent.py $pc 20000000 results/correlated/lookup_independent_pc_$pc.json results/correlated/review_pc_${pc}_mlp_pred.npy; done
+for pc in 0 0.002 0.005 0.01; do .venv/bin/python experiments/lookup_optimum.py $pc > results/correlated/lookup_pc_$pc.json; done
+.venv/bin/python experiments/pilot.py 5 5 0.005 300000 1500 transformer 64 > results/ablation/a_transformer_noval.json
+.venv/bin/python experiments/pilot.py 5 5 0.005 300000 1500 transformer 64 0.1 > results/ablation/b_transformer_val.json
+.venv/bin/python experiments/pilot.py 5 5 0.005 300000 1500 geo 64 0.1 > results/ablation/c_geo_val.json
+.venv/bin/python experiments/pilot.py 5 5 0.005 300000 300 transformer 64 > results/ablation/d_transformer_300steps.json
+.venv/bin/python experiments/pilot.py 5 5 0.005 300000 300 geo 64 > results/ablation/e_geo_300steps.json
 ```
 
-Raw outputs are in `results/`, one file per command above, produced by the code in this commit. Code: Apache License 2.0
+Raw outputs are in `results/`, one file per command above, produced by the code in this commit
+(`results/correlated/matching_merge_most_probable.json`, the edge-level comparison of the review, is the one file without a
+command: its error rates are the `matching_merge_most_probable` values of `review_pc_*.json`). `fraction_predicted_1` in the
+pilot output was added with the 300-step runs; the earlier `pilot_*.json` and `ablation/a_*`–`c_*` files predate it and do not carry it. Code: Apache License 2.0
 (`LICENSE`); the Google data keep their own CC-BY 4.0 licence and are not redistributed here.
 
 ## Limits
 
 Uniform circuit-level noise, plus one correlated-noise model at distance 3 only, where the correlated error shares its
-syndrome with a single-qubit error (a degeneracy that does not carry over as such to larger distances, not measured);
+syndrome with a single-qubit error, so the code has effective distance 2 for those errors (a degeneracy that does not carry
+over as such to larger distances, not measured);
 one architecture size; no hyper-parameter search; CPU only. These are the conditions of a pilot, stated so the numbers are
 not read as more than they are.
 
