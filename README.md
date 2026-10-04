@@ -122,9 +122,10 @@ Bonferroni over 5 cells (p < 0.01).
 
 The MLP beats PyMatching in the four cells with correlated noise and, as pre-registered, not at pc = 0 (there correlated
 matching is better, p = 3.1e-4). **What the win is, measured after the fact.** Each joint error lights exactly two
-detectors plus the observable: an ordinary long edge of the matching graph, not a hyper-edge. At distance 3 the same two
-detectors are also the syndrome of a single X error on the central data qubit, which does not flip the observable. The two
-are parallel edges with different logical effect; PyMatching merges parallel edges keeping the logical effect of the first
+detectors plus the observable: an ordinary long edge of the matching graph, not a hyper-edge. For one of the two pairs
+(the diagonal one, data qubits at (1,1) and (5,5)) those two detectors are at distance 3 also the syndrome of a single X
+error on the central data qubit, which does not flip the observable (the other pair's syndrome is shared with no
+single-qubit error). The two are parallel edges with different logical effect; PyMatching merges parallel edges keeping the logical effect of the first
 one in the error model (the single-qubit one here), whatever the probabilities. This is documented PyMatching behaviour
 (the `Matching.from_detector_error_model` docstring), discussed by its maintainer in
 [PyMatching#103](https://github.com/oscarhiggott/PyMatching/issues/103): parallel edges with different logical effects
@@ -189,8 +190,8 @@ pilot output was added with the 300-step runs; the earlier `pilot_*.json` and `a
 
 ## Limits
 
-Uniform circuit-level noise, plus one correlated-noise model at distance 3 only, where the correlated error shares its
-syndrome with a single-qubit error, so the code has effective distance 2 for those errors (a degeneracy that does not carry
+Uniform circuit-level noise, plus one correlated-noise model at distance 3 only, where one of the two correlated errors shares
+its syndrome with a single-qubit error, so the code has effective distance 2 for those errors (a degeneracy that does not carry
 over as such to larger distances, not measured);
 one architecture size; no hyper-parameter search; CPU only. These are the conditions of a pilot, stated so the numbers are
 not read as more than they are.
