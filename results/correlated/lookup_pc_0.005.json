@@ -1,0 +1,8 @@
+{
+ "pc": 0.005,
+ "table_shots": 20000000,
+ "distinct_syndromes": 220569,
+ "test_shots": 200000,
+ "test_syndromes_seen_in_table": 0.99436,
+ "lookup_optimum": 0.037635
+}

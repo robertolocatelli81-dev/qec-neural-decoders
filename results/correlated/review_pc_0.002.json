@@ -1,0 +1,25 @@
+{
+ "pc": 0.002,
+ "trivial": 0.13207,
+ "matching": 0.033745,
+ "matching_correlated": 0.033055,
+ "matching_merge_most_probable": 0.033745,
+ "mlp": 0.03118,
+ "best_step": 4000,
+ "mlp_train_seconds": 14.3,
+ "mlp_vs_matching_correlated": {
+  "first_right_second_wrong": 2716,
+  "first_wrong_second_right": 2341,
+  "mcnemar_p": 1.4282198005284177e-07
+ },
+ "mlp_vs_matching_merge_most_probable": {
+  "first_right_second_wrong": 2713,
+  "first_wrong_second_right": 2200,
+  "mcnemar_p": 2.649348752760909e-13
+ },
+ "matching_merge_most_probable_vs_matching_correlated": {
+  "first_right_second_wrong": 642,
+  "first_wrong_second_right": 780,
+  "mcnemar_p": 0.0002772796242281443
+ }
+}

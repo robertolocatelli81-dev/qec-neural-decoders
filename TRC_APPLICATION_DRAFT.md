@@ -19,7 +19,7 @@ quantum processors", Nature 635, 834–840, 2024) was reported to beat the best 
 contraction and correlated matching — on Sycamore data at distances 3 and 5, after pre-training on 2 × 10^9 simulated
 samples and fine-tuning an ensemble of 20 models on about 20,000 experimental shots, and to keep an advantage over
 correlated matching on simulated data with cross-talk, leakage and soft readout up to distance 11 (on a simulator that
-is not public). I want to map,
+is not public). I found no public release of that decoder's code (searched 4 October 2026). I want to map, openly,
 on public simulators and with every result reproducible from code, *which* noise features (measurement noise, errors
 correlated in time and space, leakage) give a detector-attention decoder an advantage over matching, *how large* it is
 as the code distance grows, and *where it vanishes*. Each claim is measured on held-out shots against matching on the
@@ -36,6 +36,13 @@ but behind correlated matching (14.43%). Results under uniform circuit-level noi
 
 - distance 3: matching 1.71%, MLP 1.90%, null = trivial (10.46%);
 - distance 5: matching 1.38–1.43%, MLP 7.03%, Transformer 14.78% after 1500 steps of 64 shots (262 s), null = trivial.
+- distance 3 with long-range correlated errors (pre-registered grid, 5 cells, exact paired tests, Bonferroni): the MLP
+  beats PyMatching in the four correlated cells (e.g. 4.70% vs 9.53% at pc = 0.01) and not in the control cell without
+  correlated noise, as pre-registered. Measured afterwards: the gap is mostly how the library resolves degenerate
+  parallel edges; against a matching that keeps the most probable logical effect per edge the MLP wins by 0.2 points in
+  two cells, ties in one and loses by 0.3 in one, and it stays 0.2–0.6 points above an empirical near-optimal decoder
+  (20 million-shot lookup table). The Transformer variants at distance 5 did not leave the constant-output plateau
+  within 1500 steps on CPU (negative ablation, reported).
 
 The learned decoders do not reach matching on CPU, and the reason is measured: the Transformer trains on 2640 shots/s at
 distance 3, 372 at distance 5, 62 at distance 7, 21 at distance 9 and 7.8 at distance 11 (±25% between runs), because attention grows with the

@@ -95,8 +95,58 @@ wrong, p = 0.10) finds no significant difference. Over five training seeds the M
 shots and 15.65% (s.d. 0.35) on the mirror fold (trained on `pij_from_odd_for_even.dem`, evaluated on the even shots,
 where PyMatching gets 15.56%): the sign of the difference flips between folds, so there is no evidence that the MLP beats
 PyMatching here. Against correlated matching the MLP is worse in all ten fold × seed cases (McNemar p < 0.03 in each).
-Neither learned decoder reaches correlated matching, belief matching or tensor-network contraction. The Transformer, the
-architecture that scales, is the furthest from converged within a CPU budget.
+Neither learned decoder reaches correlated matching, belief matching or tensor-network contraction. The Transformer is
+the furthest from converged within a CPU budget (dense attention, whose cost grows with the square of the number of
+detectors: not the cheapest architecture at large distance, the one able to relate any two detectors). These learned
+decoders are zero-shot on the hardware: trained only on simulated shots, never fine-tuned on real ones, so they are not
+comparable with a decoder fine-tuned on experimental shots such as Bausch et al.'s.
+
+## Long-range correlated errors (pre-registered, 4 October 2026)
+
+Pre-registration `prereg/PREREG_correlated_20261004.md` (sha256 `02d73e9e…14b02`, written before any run; one erratum on
+the wording of the noise model, `prereg/ERRATUM_correlated_20261004.md`). Distance 3, 3 rounds, uniform circuit noise
+p = 0.005, plus a joint X error on each of the two farthest data-qubit pairs after every single-qubit depolarising
+instruction (three per round) with probability pc per insertion. Decoders on the same 200,000 held-out shots (stim seed 2):
+PyMatching 2.4.0 on the circuit's own detector error model, plain and with `enable_correlations`; an MLP (hidden 256,
+500,000 training shots, 4000 steps × 512, parameters with the best validation loss kept); the null (same MLP on permuted
+labels); the trivial decoder. Primary test: exact two-sided McNemar, MLP against the better of the two matching modes,
+Bonferroni over 5 cells (p < 0.01).
+
+| pc | trivial | PyMatching | PyMatching, correlations | MLP | null | McNemar p | pre-registered win |
+|---|---|---|---|---|---|---|---|
+| 0 | 10.40% | 1.73% | 1.69% | 1.76% | 10.40% | 3.1e-4 (matching better) | no — as expected |
+| 0.002 | 13.21% | 3.37% | 3.31% | 3.12% | 13.21% | 1.4e-7 | yes |
+| 0.005 | 16.92% | 6.03% | 5.88% | 4.13% | 16.92% | 1.5e-236 | yes |
+| 0.01 | 22.35% | 9.66% | 9.53% | 4.70% | 22.35% | < 1e-300 | yes |
+| 0.02 | 30.91% | 16.62% | 16.43% | 5.38% | 30.91% | < 1e-300 | yes |
+
+The MLP beats PyMatching in the four cells with correlated noise and, as pre-registered, not at pc = 0 (there correlated
+matching is better, p = 3.1e-4). **What the win is, measured after the fact.** Each joint error lights exactly two
+detectors plus the observable: an ordinary long edge of the matching graph, not a hyper-edge. At distance 3 the same two
+detectors are also the syndrome of a single X error on the central data qubit, which does not flip the observable. The two
+are parallel edges with different logical effect; PyMatching merges parallel edges keeping the logical effect of the first
+one in the error model (the single-qubit one here), whatever the probabilities. A matching built from the same error model
+that keeps, per merged edge, the most probable logical effect gets 1.73% / 3.37% / 4.33% / 4.70% / 5.11%: the MLP is
+better than it by 0.26 and 0.20 points at pc = 0.002 and 0.005 (p = 2.7e-13 and 7.9e-10), equal at 0.01 (p = 0.93) and
+worse by 0.27 points at 0.02 (p = 6.0e-15). So most of the gap is one library's rule for degenerate parallel edges, not a
+limit of matching as a method; what remains for the learned decoder is real and small.
+
+**Distance from the optimum.** An empirical near-optimal decoder (for each of the 2^24 syndromes, the more frequent
+outcome over 20,000,000 shots sampled with a separate seed; unseen syndromes, under 1% of the test shots, fall back to
+PyMatching) gets 1.54% / 2.81% / 3.78% / 4.21% / 4.80% on the same test shots. The MLP sits 0.23 / 0.31 / 0.35 / 0.49 /
+0.57 points above it, significantly in every cell (McNemar p < 1e-32). `experiments/lookup_optimum.py` (post hoc, not
+pre-registered) gives 1.56% / 2.78% / 3.76% / 4.21% with its own table seed. Scripts: `experiments/correlated.py` (the
+pre-registered grid), `experiments/correlated_review.py` (the matching with the most probable logical effect per merged edge,
+and the paired tests against it), `experiments/lookup_independent.py` (the near-optimal decoder above); raw outputs in
+`results/correlated/`.
+
+**Ablation of the Transformer (distance 5, 5 rounds, p = 0.005, 300,000 shots, 1500 steps × 64; negative).** Transformer
+without validation 14.78%; with validation-selected checkpoint 18.72% (step 1200); a Transformer given stim's detector
+coordinates and a [CLS] readout (`GeoTransformer`), with validation, 23.35% — the trivial rate is 23.02%. It memorises a
+single batch of 64 distance-3 shots (0.0% error, like the MLP and the plain Transformer), and at 300 steps every
+Transformer variant tried, including the plain one, still outputs a constant "no flip" on all 20,000 test shots: within
+this CPU budget the plain Transformer leaves that plateau before 1500 steps and the coordinate/[CLS] one does not. Whether
+that is the readout, the coordinates or only the budget was not separated (it needs ≥ 1500 steps per variant).
 
 ## Reproduce
 
@@ -119,8 +169,10 @@ Raw outputs are in `results/`, one file per command above, produced by the code 
 
 ## Limits
 
-Uniform circuit-level noise only (where matching is expected to be strong); one architecture size; no hyper-parameter
-search; CPU only. These are the conditions of a pilot, stated so the numbers are not read as more than they are.
+Uniform circuit-level noise, plus one correlated-noise model at distance 3 only, where the correlated error shares its
+syndrome with a single-qubit error (a degeneracy that does not carry over as such to larger distances, not measured);
+one architecture size; no hyper-parameter search; CPU only. These are the conditions of a pilot, stated so the numbers are
+not read as more than they are.
 
 — Roberto Locatelli (individual developer). Written with Noûs, an AI agent operating under a revocable mandate from Roberto
 Locatelli, who reviews and is accountable for what is published.

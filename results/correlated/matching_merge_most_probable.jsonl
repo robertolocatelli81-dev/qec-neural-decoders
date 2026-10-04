@@ -1,0 +1,170 @@
+{
+ "0.0": {
+  "pc": 0.0,
+  "pymatching_plain": 0.017335,
+  "pymatching_correlated": 0.016855,
+  "matching_merge_most_probable_fault": 0.017335,
+  "edges_with_parallel_diff_obs": 0,
+  "edges_fault_ids_differ_from_pymatching": 0,
+  "differing_edges": [],
+  "n_edges_pymatching": 78,
+  "n_edges_mine": 78
+ },
+ "0.002": {
+  "pc": 0.002,
+  "pymatching_plain": 0.033745,
+  "pymatching_correlated": 0.033055,
+  "matching_merge_most_probable_fault": 0.033745,
+  "edges_with_parallel_diff_obs": 4,
+  "edges_fault_ids_differ_from_pymatching": 0,
+  "differing_edges": [],
+  "n_edges_pymatching": 82,
+  "n_edges_mine": 82
+ },
+ "0.005": {
+  "pc": 0.005,
+  "pymatching_plain": 0.060325,
+  "pymatching_correlated": 0.05883,
+  "matching_merge_most_probable_fault": 0.04328,
+  "edges_with_parallel_diff_obs": 4,
+  "edges_fault_ids_differ_from_pymatching": 3,
+  "differing_edges": [
+   [
+    [
+     1,
+     2
+    ],
+    [],
+    [
+     0
+    ]
+   ],
+   [
+    [
+     5,
+     10
+    ],
+    [],
+    [
+     0
+    ]
+   ],
+   [
+    [
+     13,
+     18
+    ],
+    [],
+    [
+     0
+    ]
+   ]
+  ],
+  "n_edges_pymatching": 82,
+  "n_edges_mine": 82
+ },
+ "0.01": {
+  "pc": 0.01,
+  "pymatching_plain": 0.096565,
+  "pymatching_correlated": 0.09529,
+  "matching_merge_most_probable_fault": 0.04698,
+  "edges_with_parallel_diff_obs": 4,
+  "edges_fault_ids_differ_from_pymatching": 4,
+  "differing_edges": [
+   [
+    [
+     1,
+     2
+    ],
+    [],
+    [
+     0
+    ]
+   ],
+   [
+    [
+     5,
+     10
+    ],
+    [],
+    [
+     0
+    ]
+   ],
+   [
+    [
+     13,
+     18
+    ],
+    [],
+    [
+     0
+    ]
+   ],
+   [
+    [
+     21,
+     22
+    ],
+    [],
+    [
+     0
+    ]
+   ]
+  ],
+  "n_edges_pymatching": 82,
+  "n_edges_mine": 82
+ },
+ "0.02": {
+  "pc": 0.02,
+  "pymatching_plain": 0.166215,
+  "pymatching_correlated": 0.164255,
+  "matching_merge_most_probable_fault": 0.051115,
+  "edges_with_parallel_diff_obs": 4,
+  "edges_fault_ids_differ_from_pymatching": 4,
+  "differing_edges": [
+   [
+    [
+     1,
+     2
+    ],
+    [],
+    [
+     0
+    ]
+   ],
+   [
+    [
+     5,
+     10
+    ],
+    [],
+    [
+     0
+    ]
+   ],
+   [
+    [
+     13,
+     18
+    ],
+    [],
+    [
+     0
+    ]
+   ],
+   [
+    [
+     21,
+     22
+    ],
+    [],
+    [
+     0
+    ]
+   ]
+  ],
+  "n_edges_pymatching": 82,
+  "n_edges_mine": 82
+ }
+}

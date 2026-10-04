@@ -1,0 +1,20 @@
+{
+ "pc": 0.01,
+ "table_seed": 11,
+ "table_shots": 20000000,
+ "distinct_syndromes": 254049,
+ "test_seed": 2,
+ "test_shots": 200000,
+ "test_shots_seen_in_table": 0.99289,
+ "test_shots_on_confident_syndromes": 0.96959,
+ "lookup_fallback_matching": 0.04208,
+ "lookup_fallback_noflip": 0.04304,
+ "oracle_on_test_itself_optimistic": 0.02881,
+ "trivial": 0.223455,
+ "mlp": 0.047015,
+ "mlp_vs_lookup": {
+  "mlp_right_lookup_wrong": 1352,
+  "mlp_wrong_lookup_right": 2339,
+  "mcnemar_p": 6.219802020099032e-60
+ }
+}

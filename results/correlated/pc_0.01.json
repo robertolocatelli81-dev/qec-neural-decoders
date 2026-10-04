@@ -1,0 +1,19 @@
+{
+ "prereg_sha256": "02d73e9ed55ec1d1892bd59d3fc5aa509e3cda9315604c93568e922be8a14b02",
+ "pc": 0.01,
+ "train_shots": 500000,
+ "test_shots": 200000,
+ "steps": 4000,
+ "best_step": 3900,
+ "trivial": 0.223455,
+ "matching": 0.096565,
+ "matching_correlated": 0.09529,
+ "mlp": 0.047015,
+ "null_permuted_labels": 0.223455,
+ "mlp_train_seconds": 17.0,
+ "paired_vs": "matching_correlated",
+ "discordant_mlp_right_matching_wrong": 14987,
+ "discordant_mlp_wrong_matching_right": 5332,
+ "mcnemar_p_two_sided": 0.0,
+ "prereg_win": true
+}
