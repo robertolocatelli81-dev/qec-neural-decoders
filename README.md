@@ -50,6 +50,36 @@ from the table). The cost is attention over all detectors of a shot: there are (
 720, 1320 above), and attention grows with the square of that number — a tensor workload, which is what accelerators are
 built for.
 
+## On real hardware data (Google Sycamore, 4 October 2026)
+
+Data: "Suppressing quantum errors by scaling a surface code logical qubit" (Nature 2023), [Zenodo 6804040](https://zenodo.org/records/6804040),
+CC-BY 4.0, md5 verified. 50,000 shots per experiment, with Google's own predictions from four decoders.
+
+**Positive control.** PyMatching here, configured with each experiment's `circuit_detector_error_model.dem`, reproduces
+Google's published PyMatching predictions on 100.00% of the 50,000 shots (distance 3 with 1 and 5 rounds, distance 5 with
+5 rounds). With the data-derived models (`pij_from_even_for_odd.dem` on odd shots and the converse) agreement drops to
+95–96%; that variant is reported as its own decoder.
+
+Distance 3, 5 rounds (`surface_code_bX_d3_r05_center_3_5`), logical error rate on the 25,000 **odd** real shots. The
+learned decoders are trained only on shots sampled from `pij_from_even_for_odd.dem` (derived from the even shots); they
+never see a real shot in training.
+
+| decoder | logical error rate |
+|---|---|
+| tensor network contraction (Google) | 12.72% |
+| belief matching (Google) | 13.06% |
+| correlated matching (Google) | 14.43% |
+| MLP, 500k simulated shots, 4000 steps × 512 (27 s) | 15.37% |
+| PyMatching, data-derived models (here) | 15.51% |
+| PyMatching (Google; reproduced here) | 15.74% |
+| Transformer, 500k simulated shots, 3000 steps × 128 (373 s) | 20.39% |
+| null (MLP and Transformer on permuted labels) | 27.84% |
+| trivial | 27.84% |
+
+The MLP is 0.37 points below PyMatching; with 25,000 shots the standard error of each rate is about 0.23 points, so the
+difference is not significant. Neither learned decoder reaches correlated matching, belief matching or tensor-network
+contraction. The Transformer, the architecture that scales, is the furthest from converged within a CPU budget.
+
 ## Reproduce
 
 ```bash
