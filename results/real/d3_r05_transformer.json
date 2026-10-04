@@ -26,7 +26,7 @@
   "steps": 3000,
   "batch": 128,
   "ler_odd_real_shots": 0.20388,
-  "train_seconds": 372.8,
+  "train_seconds": 280.5,
   "null_permuted_labels_ler_odd": 0.2784
  }
 }

@@ -1,0 +1,14 @@
+{
+ "distance": 5,
+ "batch": 64,
+ "steps": 1000,
+ "ones_in_batch": 18,
+ "mlp": {
+  "error_on_the_memorised_batch": 0.0,
+  "train_seconds": 1.3
+ },
+ "transformer": {
+  "error_on_the_memorised_batch": 0.0,
+  "train_seconds": 169.2
+ }
+}

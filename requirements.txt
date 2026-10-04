@@ -1,0 +1,8 @@
+# Versions measured on 4 October 2026 (Python 3.11.2, CPU). Install: pip install -r requirements.txt
+jax==0.10.2
+jaxlib==0.10.2
+flax==0.12.8
+optax==0.2.8
+stim==1.16.0
+pymatching==2.4.0
+numpy==2.4.6

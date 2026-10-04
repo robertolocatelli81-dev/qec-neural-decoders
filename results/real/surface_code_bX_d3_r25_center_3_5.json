@@ -2,20 +2,22 @@
  "experiment": "surface_code_bX_d3_r25_center_3_5",
  "shots": 50000,
  "detectors": 200,
- "positive_control_agreement_with_google_pymatching": 0.78448,
+ "positive_control_agreement_with_google_pymatching": 0.99886,
  "ler_all_shots": {
   "pymatching": 0.43416,
   "correlated_matching": 0.41942,
   "belief_matching": 0.4025,
   "tensor_network_contraction": 0.40228,
-  "pymatching_here": 0.43652
+  "pymatching_here": 0.43406,
+  "pymatching_here_pij": 0.43652
  },
  "ler_odd_shots": {
   "pymatching": 0.4318,
   "correlated_matching": 0.41816,
   "belief_matching": 0.40412,
   "tensor_network_contraction": 0.401,
-  "pymatching_here": 0.43508,
+  "pymatching_here": 0.43156,
+  "pymatching_here_pij": 0.43508,
   "trivial": 0.4926
  }
 }

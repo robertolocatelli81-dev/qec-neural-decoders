@@ -1,0 +1,6 @@
+qec-neural-decoders
+Copyright 2026 Roberto Locatelli
+
+This product includes no third-party code. It uses stim, PyMatching, JAX, Flax and Optax as dependencies,
+each under its own licence; the Google Sycamore data it is measured on (Zenodo 6804040) are CC-BY 4.0 and are not
+redistributed here.

@@ -1,0 +1,23 @@
+{
+ "experiment": "surface_code_bX_d3_r01_center_3_5",
+ "shots": 50000,
+ "detectors": 8,
+ "positive_control_agreement_with_google_pymatching": 1.0,
+ "ler_all_shots": {
+  "pymatching": 0.01588,
+  "correlated_matching": 0.01584,
+  "belief_matching": 0.01622,
+  "tensor_network_contraction": 0.01608,
+  "pymatching_here": 0.01588,
+  "pymatching_here_pij": 0.0165
+ },
+ "ler_odd_shots": {
+  "pymatching": 0.01668,
+  "correlated_matching": 0.01664,
+  "belief_matching": 0.0168,
+  "tensor_network_contraction": 0.01664,
+  "pymatching_here": 0.01668,
+  "pymatching_here_pij": 0.01736,
+  "trivial": 0.07848
+ }
+}

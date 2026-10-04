@@ -1,2 +1,5 @@
-{"distance": 3, "rounds": 3, "detectors": 24, "stim_seconds_per_100k_shots": 0.048, "batch": 64, "seconds_per_step": 0.0289, "shots_per_second_training": 2218.4, "peak_rss_mib": 1144}
-{"distance": 5, "rounds": 5, "detectors": 120, "stim_seconds_per_100k_shots": 0.179, "batch": 64, "seconds_per_step": 0.1798, "shots_per_second_training": 356.0, "peak_rss_mib": 3416}
+{"distance": 3, "rounds": 3, "detectors": 24, "stim_seconds_per_100k_shots": 0.036, "batch": 64, "seconds_per_step": 0.0242, "shots_per_second_training": 2640.1, "peak_rss_mib": 633}
+{"distance": 5, "rounds": 5, "detectors": 120, "stim_seconds_per_100k_shots": 0.209, "batch": 64, "seconds_per_step": 0.1722, "shots_per_second_training": 371.6, "peak_rss_mib": 1012}
+{"distance": 7, "rounds": 7, "detectors": 336, "stim_seconds_per_100k_shots": 0.573, "batch": 64, "seconds_per_step": 1.0314, "shots_per_second_training": 62.0, "peak_rss_mib": 1971}
+{"distance": 9, "rounds": 9, "detectors": 720, "stim_seconds_per_100k_shots": 1.168, "batch": 16, "seconds_per_step": 0.7498, "shots_per_second_training": 21.3, "peak_rss_mib": 1865}
+{"distance": 11, "rounds": 11, "detectors": 1320, "stim_seconds_per_100k_shots": 2.334, "batch": 4, "seconds_per_step": 0.5106, "shots_per_second_training": 7.8, "peak_rss_mib": 1811}

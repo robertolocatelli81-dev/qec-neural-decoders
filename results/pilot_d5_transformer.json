@@ -12,6 +12,6 @@
  "steps": 1500,
  "batch": 64,
  "learned": 0.1478,
- "train_seconds": 253.2,
+ "train_seconds": 261.9,
  "null_permuted_labels": 0.23015
 }
