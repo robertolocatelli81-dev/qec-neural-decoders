@@ -157,6 +157,9 @@ coordinates or only the budget was not separated (it needs ≥ 1500 steps per va
 
 ## Reproduce
 
+The bench self-tests also run in CI on every push (`.github/workflows/tests.yml`: Python 3.11, the pinned
+requirements; the job fails unless every test defined in `tests/test_bench.py` runs and passes).
+
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt     # versions pinned to the ones measured
 .venv/bin/python tests/test_bench.py                                    # bench self-tests (seconds)
