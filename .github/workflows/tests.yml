@@ -1,0 +1,24 @@
+name: tests
+# The bench's own tests (tests/test_bench.py) on the pinned versions of requirements.txt, measured with Python 3.11.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+      - name: Pinned dependencies
+        run: pip install -r requirements.txt
+      - name: Every test in tests/test_bench.py runs and passes (an AssertionError exits non-zero)
+        run: |
+          set -o pipefail
+          python tests/test_bench.py | tee bench.log
+          want=$(grep -c '^def test_' tests/test_bench.py)
+          got=$(grep -c '^ok test_' bench.log)
+          echo "tests defined: $want, passed: $got"
+          test "$want" -gt 0 && test "$got" -eq "$want"
