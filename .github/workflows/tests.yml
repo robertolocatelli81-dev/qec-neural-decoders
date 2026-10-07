@@ -1,5 +1,5 @@
 name: tests
-# The bench's own tests (tests/test_bench.py) on the pinned versions of requirements.txt, measured with Python 3.11.
+# The bench's own tests (tests/test_bench.py, tests/test_cos2phi.py) on the pinned versions of requirements.txt, Python 3.11.
 on:
   push:
   pull_request:
@@ -14,11 +14,13 @@ jobs:
           python-version: "3.11"
       - name: Pinned dependencies
         run: pip install -r requirements.txt
-      - name: Every test in tests/test_bench.py runs and passes (an AssertionError exits non-zero)
+      - name: Every test in tests/test_bench.py and tests/test_cos2phi.py runs and passes (an AssertionError exits non-zero)
         run: |
           set -o pipefail
-          python tests/test_bench.py | tee bench.log
-          want=$(grep -c '^def test_' tests/test_bench.py)
-          got=$(grep -c '^ok test_' bench.log)
-          echo "tests defined: $want, passed: $got"
-          test "$want" -gt 0 && test "$got" -eq "$want"
+          for t in tests/test_bench.py tests/test_cos2phi.py; do
+            python "$t" | tee "$(basename "$t" .py).log"
+            want=$(grep -c '^def test_' "$t")
+            got=$(grep -c '^ok test_' "$(basename "$t" .py).log")
+            echo "$t: tests defined: $want, passed: $got"
+            test "$want" -gt 0 && test "$got" -eq "$want"
+          done

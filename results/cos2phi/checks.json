@@ -1,0 +1,166 @@
+{
+ "f3_distance": {
+  "d3_css_x": {
+   "pure_z": 3,
+   "eta_1": 3
+  },
+  "d3_css_z": {
+   "pure_z": "not found within limits: Failed to find any logical errors.",
+   "eta_1": 3
+  },
+  "d3_xzzx_x": {
+   "pure_z": "not found within limits: Failed to find any logical errors.",
+   "eta_1": 3
+  },
+  "d3_xzzx_z": {
+   "pure_z": 3,
+   "eta_1": 3
+  },
+  "d5_css_x": {
+   "pure_z": 5,
+   "eta_1": 5
+  },
+  "d5_css_z": {
+   "pure_z": "not found within limits: Failed to find any logical errors.",
+   "eta_1": 5
+  },
+  "d5_xzzx_x": {
+   "pure_z": "not found within limits: Failed to find any logical errors.",
+   "eta_1": 5
+  },
+  "d5_xzzx_z": {
+   "pure_z": 5,
+   "eta_1": 5
+  }
+ },
+ "f4_dem_parallel_edges": {
+  "d3_css_x_eta1.0_p0.01": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d3_css_x_eta1.0_p0.03": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d3_css_x_eta27.5_p0.01": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d3_css_x_eta27.5_p0.03": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d3_css_z_eta1.0_p0.01": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d3_css_z_eta1.0_p0.03": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d3_css_z_eta27.5_p0.01": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d3_css_z_eta27.5_p0.03": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d3_xzzx_x_eta1.0_p0.01": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d3_xzzx_x_eta1.0_p0.03": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d3_xzzx_x_eta27.5_p0.01": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d3_xzzx_x_eta27.5_p0.03": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d3_xzzx_z_eta1.0_p0.01": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d3_xzzx_z_eta1.0_p0.03": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d3_xzzx_z_eta27.5_p0.01": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d3_xzzx_z_eta27.5_p0.03": {
+   "detector_sets": 51,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_css_x_eta1.0_p0.01": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_css_x_eta1.0_p0.03": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_css_x_eta27.5_p0.01": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_css_x_eta27.5_p0.03": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_css_z_eta1.0_p0.01": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_css_z_eta1.0_p0.03": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_css_z_eta27.5_p0.01": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_css_z_eta27.5_p0.03": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_xzzx_x_eta1.0_p0.01": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_xzzx_x_eta1.0_p0.03": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_xzzx_x_eta27.5_p0.01": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_xzzx_x_eta27.5_p0.03": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_xzzx_z_eta1.0_p0.01": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_xzzx_z_eta1.0_p0.03": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_xzzx_z_eta27.5_p0.01": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  },
+  "d5_xzzx_z_eta27.5_p0.03": {
+   "detector_sets": 297,
+   "parallel_edge_sets_with_different_effect": 0
+  }
+ }
+}

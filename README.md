@@ -21,6 +21,9 @@ permuted labels.
   loop (Adam, sigmoid cross-entropy), compiled with `jax.jit`.
 - `experiments/pilot.py` — trivial / matching / learned / null on one experiment.
 - `experiments/scaling.py` — the cost of the Transformer on the machine it runs on, as the distance grows.
+- `qecnd/cos2phi.py` — the cos(2φ) transmon of arXiv:2603.13114 (Eq. 1–2, Table I) in the charge basis, its 1/f-flux-noise
+  T1 (its Eq. 4) and the Pauli twirl of the T1/Tφ channel; `qecnd/biased.py` — surface-code memory circuits with a Z-biased
+  Pauli channel on the data qubits, in the CSS or the XZZX frame; `experiments/cos2phi_*.py` — that study (below).
 
 ## Measured on a laptop CPU (8 cores, 6 GB RAM, JAX 0.10.2 CPU), 4 October 2026
 
@@ -101,6 +104,22 @@ detectors: not the cheapest architecture at large distance, the one able to rela
 decoders are zero-shot on the hardware: trained only on simulated shots, never fine-tuned on real ones, so they are not
 comparable with a decoder fine-tuned on experimental shots such as Bausch et al.'s.
 
+## Errors from a cos(2φ)-protected qubit (pre-registered, 7 October 2026)
+
+Pre-registration `prereg/PREREG_cos2phi_20261007.md` (sha256 `6cc3b0e5…505e1`, written before any run). The qubit of
+Roverc'h et al. (arXiv:2603.13114) is diagonalised from its published Hamiltonian and Table I: doublet 12.98 MHz (measured
+13.6), charge-matrix-element suppression 157× (their 2.2 / 1.3 × 10⁻²), T1 from their flux-noise formula and amplitude 43 µs
+(measured 70); the wrong sign of the cos(2φ) term gives 128 MHz, so the check can fail. Pauli-twirled, the device's T1/T2 give a
+Z-biased channel, η = p_Z/(p_X + p_Y) = 17–50 (27.5 with the measured T1 and echo T2). Its strength is above every known
+threshold, so the grid keeps the structure (η = 27.5) and scales p to 0.01 and 0.03 per data qubit per round (phenomenological
+model: ideal gates, measurement flips q = p). 32 pre-registered cells (d = 3, 5; η = 1 control and 27.5; CSS and XZZX frames,
+both bases) plus 8 sensitivity cells at η = 49.5, each with PyMatching, an MLP, the null and, at d = 3, a 10-million-shot lookup
+on the same 200,000 shots. **As measured** (`results/cos2phi/SUMMARY.md`): matching on the XZZX frame beats matching on the
+vulnerable CSS basis by 8.7× / 7.3× at d = 3 and 21× / 14.5× at d = 5 (P1 holds); the null is at the trivial rate in 40/40 cells
+(P3 holds); the MLP beats PyMatching in two biased cells at d = 3 (0.14 and 0.17 points) but also in four unbiased control
+cells by up to 0.37 points (P0 fails), and no biased win exceeds that margin: **no learned-decoder advantage attributable to
+the cos(2φ) bias at this scale** (P2, as pre-registered: no). At d = 5 the MLP does not reach matching in any cell (budget).
+
 ## Long-range correlated errors (pre-registered, 4 October 2026)
 
 Pre-registration `prereg/PREREG_correlated_20261004.md` (sha256 `02d73e9e…14b02`, written before any run; one erratum on
@@ -158,11 +177,12 @@ coordinates or only the budget was not separated (it needs ≥ 1500 steps per va
 ## Reproduce
 
 The bench self-tests also run in CI on every push (`.github/workflows/tests.yml`: Python 3.11, the pinned
-requirements; the job fails unless every test defined in `tests/test_bench.py` runs and passes).
+requirements; the job fails unless every test defined in `tests/test_bench.py` and `tests/test_cos2phi.py` runs and passes).
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt     # versions pinned to the ones measured
 .venv/bin/python tests/test_bench.py                                    # bench self-tests (seconds)
+.venv/bin/python tests/test_cos2phi.py                                  # cos(2φ) physics and biased-circuit checks (seconds)
 .venv/bin/python experiments/pilot.py 3 3 0.005 200000 3000 mlp 512
 .venv/bin/python experiments/pilot.py 5 5 0.005 300000 4000 mlp 512
 .venv/bin/python experiments/pilot.py 5 5 0.005 300000 1500 transformer 64
@@ -183,6 +203,12 @@ for pc in 0 0.002 0.005 0.01; do .venv/bin/python experiments/lookup_optimum.py 
 .venv/bin/python experiments/pilot.py 5 5 0.005 300000 1500 geo 64 0.1 > results/ablation/c_geo_val.json
 .venv/bin/python experiments/pilot.py 5 5 0.005 300000 300 transformer 64 > results/ablation/d_transformer_300steps.json
 .venv/bin/python experiments/pilot.py 5 5 0.005 300000 300 geo 64 > results/ablation/e_geo_300steps.json
+# cos(2φ) qubit: physics, checks F3–F4, the pre-registered grid (+ η = 49.5 sensitivity cells), the summary and the hashes
+.venv/bin/python experiments/cos2phi_physics.py > results/cos2phi/physics.json
+.venv/bin/python experiments/cos2phi_checks.py > results/cos2phi/checks.json
+experiments/cos2phi_grid.sh 3 1 27.5 && experiments/cos2phi_grid.sh 5 1 27.5 && experiments/cos2phi_grid.sh 3 49.5
+.venv/bin/python experiments/cos2phi_summary.py > results/cos2phi/SUMMARY.md
+(cd results/cos2phi && sha256sum -c SHA256SUMS)
 ```
 
 Raw outputs are in `results/`, one file per command above, produced by the code in this commit
@@ -195,7 +221,8 @@ pilot output was added with the 300-step runs; the earlier `pilot_*.json` and `a
 
 Uniform circuit-level noise, plus one correlated-noise model at distance 3 only, where one of the two correlated errors shares
 its syndrome with a single-qubit error, so the code has effective distance 2 for those errors (a degeneracy that does not carry
-over as such to larger distances, not measured);
+over as such to larger distances, not measured), plus one phenomenological Z-biased model (ideal gates, q = p, XZZX via the
+Clifford frame, exact only for ideal gates) at distances 3 and 5;
 one architecture size; no hyper-parameter search; CPU only. These are the conditions of a pilot, stated so the numbers are
 not read as more than they are.
 

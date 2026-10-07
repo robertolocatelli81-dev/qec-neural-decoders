@@ -1,0 +1,53 @@
+{
+ "distance": 5,
+ "rounds": 5,
+ "eta": 1.0,
+ "p": 0.01,
+ "q": 0.01,
+ "p_x": 0.0025,
+ "p_y": 0.0025,
+ "p_z": 0.005,
+ "code": "xzzx",
+ "basis": "z",
+ "detectors": 120,
+ "prereg_sha256": "6cc3b0e5fdde2f1031faa2b15b55153ea767f8013622ba508ef9782419e505e1",
+ "train_shots": 500000,
+ "test_shots": 200000,
+ "steps": 4000,
+ "batch": 512,
+ "val_frac": 0.1,
+ "flip_rate_test": 0.14024,
+ "trivial": 0.14024,
+ "dem_parallel_edges": {
+  "detector_sets": 297,
+  "parallel_edge_sets_with_different_effect": 0
+ },
+ "matching": 0.001465,
+ "mlp": 0.011195,
+ "mlp_best_step": 4000,
+ "mlp_train_seconds": 18.8,
+ "mlp_fraction_predicted_1": 0.139035,
+ "null_permuted_labels": 0.14024,
+ "mlp_vs_matching": {
+  "only_mlp_wrong": 2076,
+  "only_matching_wrong": 130,
+  "mcnemar_p": 0.0
+ },
+ "trivial_ci95": [
+  0.13872510850807163,
+  0.14176871125895935
+ ],
+ "matching_ci95": [
+  0.0013066806841104978,
+  0.0016424699650912135
+ ],
+ "mlp_ci95": [
+  0.010743191620228552,
+  0.011665585262203057
+ ],
+ "null_permuted_labels_ci95": [
+  0.13872510850807163,
+  0.14176871125895935
+ ],
+ "wall_seconds": 42.6
+}
