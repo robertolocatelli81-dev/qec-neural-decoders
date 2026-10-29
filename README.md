@@ -23,7 +23,8 @@ permuted labels.
 - `experiments/scaling.py` — the cost of the Transformer on the machine it runs on, as the distance grows.
 - `qecnd/cos2phi.py` — the cos(2φ) transmon of arXiv:2603.13114 (Eq. 1–2, Table I) in the charge basis, its 1/f-flux-noise
   T1 (its Eq. 4) and the Pauli twirl of the T1/Tφ channel; `qecnd/biased.py` — surface-code memory circuits with a Z-biased
-  Pauli channel on the data qubits, in the CSS or the XZZX frame; `experiments/cos2phi_*.py` — that study (below).
+  Pauli channel on the data qubits, in the CSS or the XZZX frame; `experiments/cos2phi_*.py` — that study (below);
+  `experiments/drift_gap.py` — the per-qubit flux-drift study (below).
 
 ## Measured on a laptop CPU (8 cores, 6 GB RAM, JAX 0.10.2 CPU), 4 October 2026
 
@@ -120,6 +121,32 @@ vulnerable CSS basis by 8.7× / 7.3× at d = 3 and 21× / 14.5× at d = 5 (P1 ho
 cells by up to 0.37 points (P0 fails), and no biased win exceeds that margin: **no learned-decoder advantage attributable to
 the cos(2φ) bias at this scale** (P2, as pre-registered: no). At d = 5 the MLP does not reach matching in any cell (budget).
 
+## Per-qubit flux drift on cos(2φ) qubits (pre-registered, 22 October 2026)
+
+Pre-registration `prereg/PREREG_drift_20261022.md` (sha256 `135f58eb…a1cc3`, also recorded in both JSON result files and, abbreviated, in `DECISION.md`). It was
+written before any run of this study (file time 22 October 00:57 UTC; controls run at 00:59, grid 04:49–04:59 UTC), but it is first
+published here, after the result: its date rests on our own records (the file time on the author's machine and the times the
+script wrote into the result files), not on git history or an external timestamp. Its line "Local work,
+not published" was true when it was written; the file is unchanged so that its hash still holds. The question: when flux drift
+moves each cos(2φ) data qubit off its sweet spot by a different amount, does a decoder that knows each qubit's current rates (O)
+beat one that knows only their current average (G)? Inputs from Roverc'h et al. (arXiv:2603.13114): drift of the order of 0.1 mΦ0 per hour,
+1/f flux noise amplitude 5.6 µΦ0/√Hz, T1 and T2 as published; the assumptions are marked A1–A4 in the pre-registration (A1: the
+per-qubit spread of the drift is assumed, the paper gives one drift number for one qubit; A2: syndrome rounds are not echoed; two
+factors κ = 0.833 (echo-like) and 4.6 (Ramsey-like) bracket the unknown low-frequency cutoff). Rotated surface code, CSS and XZZX frames, PyMatching on the circuit DEM;
+160 cells (t, κ, d = 3, 5, frame, basis, p_cal), 200 episodes × 1000 shots each (a first run, stopped after 106 cells for
+other work, was not read and is not published; the grid was rerun whole with the same per-cell seeds, and those 106 cells came
+out identical in the rerun). Controls first (`results/drift/controls.json`):
+C0 identical predictions at t = 0, C1 positive control R_OG 0.50 [0.31, 0.66], C2 null upper bound 0.019. **As measured**
+(`results/drift/DECISION.md`, grid sha256 `827fa2a2…45f8`): **OPEN** under the pre-registered rule (R_OG lower 95 % bound
+≥ 0.10 in at least one read XZZX cell) — 6 of 64 read XZZX cells, all at κ = 4.6 and d = 5 (best: R_OG 0.276 [0.147, 0.403], the largest of 64 noisy estimates);
+no cell opens at κ = 0.833. A check outside the pre-registration (29–30 October; seeds 5000 + i instead of 1000 + i in
+`experiments/drift_gap.py`, runs not published): the 64 XZZX cells at t > 0 rerun with those seeds give 5 open cells, so the
+outcome stays OPEN, and again none at κ = 0.833; 4 of them are at κ = 4.6 and d = 5, where the best cell above gives
+0.172 [0.037, 0.297] and does not open, and 1 is at κ = 4.6 and d = 3 (t = 2 h, x, p_cal 0.005: 0.236 [0.172, 0.295]), so
+the grouping of the six cells at d = 5 depends on the seeds. The gain depends on A2 and A1, the rule is liberal ("at least one of 64"), and plain recalibration
+(G against M) already takes part of the gain; these limits are written in the decision file with the result. The next step
+under the pre-registration, an online per-qubit estimator, is not built.
+
 ## Long-range correlated errors (pre-registered, 4 October 2026)
 
 Pre-registration `prereg/PREREG_correlated_20261004.md` (sha256 `02d73e9e…14b02`, written before any run; one erratum on
@@ -209,11 +236,18 @@ for pc in 0 0.002 0.005 0.01; do .venv/bin/python experiments/lookup_optimum.py 
 experiments/cos2phi_grid.sh 3 1 27.5 && experiments/cos2phi_grid.sh 5 1 27.5 && experiments/cos2phi_grid.sh 3 49.5
 .venv/bin/python experiments/cos2phi_summary.py > results/cos2phi/SUMMARY.md
 (cd results/cos2phi && sha256sum -c SHA256SUMS)
+# per-qubit flux drift: the three controls, then the 160-cell grid (about 10 minutes here, 04:49–04:59 UTC in its own file); the script
+# never overwrites its --out file and needs the folder to exist, so a rerun goes next to the published files, to compare with them
+mkdir -p results/drift/rerun
+.venv/bin/python experiments/drift_gap.py --controls --out results/drift/rerun/controls.json
+.venv/bin/python experiments/drift_gap.py --grid --out results/drift/rerun/grid_full.json
 ```
 
 Raw outputs are in `results/`, one file per command above, produced by the code in this commit
-(`results/correlated/matching_merge_most_probable.json`, the edge-level comparison of the review, is the one file without a
-command: its error rates are the `matching_merge_most_probable` values of `review_pc_*.json`). `fraction_predicted_1` in the
+(`results/correlated/matching_merge_most_probable.json`, the edge-level comparison of the review, has no
+command: its error rates are the `matching_merge_most_probable` values of `review_pc_*.json`; `results/drift/DECISION.md` has none
+either: it was written by hand from `grid_full.json` under the pre-registered rule, and `results/drift/grid_full.log` is the
+terminal output of the grid command). `fraction_predicted_1` in the
 pilot output was added with the 300-step runs; the earlier `pilot_*.json` and `ablation/a_*`–`c_*` files predate it and do not carry it. Code: Apache License 2.0
 (`LICENSE`); the Google data keep their own CC-BY 4.0 licence and are not redistributed here.
 
@@ -222,7 +256,9 @@ pilot output was added with the 300-step runs; the earlier `pilot_*.json` and `a
 Uniform circuit-level noise, plus one correlated-noise model at distance 3 only, where one of the two correlated errors shares
 its syndrome with a single-qubit error, so the code has effective distance 2 for those errors (a degeneracy that does not carry
 over as such to larger distances, not measured), plus one phenomenological Z-biased model (ideal gates, q = p, XZZX via the
-Clifford frame, exact only for ideal gates) at distances 3 and 5;
+Clifford frame, exact only for ideal gates) at distances 3 and 5, and the same model with one channel per data qubit for the
+flux-drift study (assumptions A1–A4 of its pre-registration: assumed per-qubit drift spread, no echo in the syndrome rounds,
+Pauli twirl per round, one scale factor; ideal final data measurement);
 one architecture size; no hyper-parameter search; CPU only. These are the conditions of a pilot, stated so the numbers are
 not read as more than they are.
 
